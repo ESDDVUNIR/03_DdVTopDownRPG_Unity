@@ -6,14 +6,20 @@ public class MouseFollower : MonoBehaviour
 {
     [SerializeField] private Canvas canvas;
     [SerializeField] private Ui_Item item;
+    private Ui_Item itemInstance;
 
     void Awake(){
+        
+    }
+    void Start(){
         canvas= transform.root.GetComponent<Canvas>();
-        item= GetComponentInChildren<Ui_Item>();
-        Toggle(false);
+        //showItem= GetComponentInChildren<Ui_Item>();
+        //showItem.gameObject.SetActive(true);
+        //Toggle(false);
     }
     public void SetData(Sprite sprite, int quantity){
         item.SetData(sprite, quantity);
+        //showItem.SetData(sprite, quantity);
     }
     void Update(){
         Vector2 position;

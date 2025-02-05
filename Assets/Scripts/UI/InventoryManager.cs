@@ -8,8 +8,9 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private int inventorySize;
 
     public int InventorySize { get => inventorySize; set => inventorySize = value; }
-    void Start(){
+    void Awake(){
         uiInventory.InitializeInventory(inventorySize);
+        uiInventory.ShowHide();
     }
     void Update() {
         if(Input.GetKeyDown(KeyCode.I)){

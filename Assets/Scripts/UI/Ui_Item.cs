@@ -15,6 +15,10 @@ public class Ui_Item : MonoBehaviour
     public event Action<Ui_Item> OnItemClicked, OnItemDroppedOn, OnItemBeginDrag,OnItemEndDrag, OnRightMouseBtnClick;
 
     private bool empty=true;
+
+    public Image ItemImage { get => itemImage; set => itemImage = value; }
+    public TMP_Text QuantityTxt { get => quantityTxt; set => quantityTxt = value; }
+
     public void Awake(){
         ResetData();
         Deselect();
@@ -43,9 +47,18 @@ public class Ui_Item : MonoBehaviour
             return;
         OnItemBeginDrag?.Invoke(this);
     }
-    public void OnDrop(){
-        OnItemDroppedOn?.Invoke(this);
+    public void OnDrop()
+    {
+    Debug.Log($"OnDrop executed on {gameObject.name}");
+    if (OnItemDroppedOn == null)
+    {
+        Debug.LogError($"OnItemDroppedOn is null for {gameObject.name}!");
+        return;
     }
+
+    OnItemDroppedOn.Invoke(this);
+    }
+
     public void OnendDrag(){
         OnItemEndDrag?.Invoke(this);
     }
