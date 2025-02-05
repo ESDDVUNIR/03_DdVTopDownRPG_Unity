@@ -11,10 +11,8 @@ public class UI_InventoryMenu : MonoBehaviour
     [SerializeField] private MouseFollower mouseFollower;
 
     List<Ui_Item> listofUIItems = new List<Ui_Item>();
-    public Sprite theSprite, theSprite2;
-    public int quantity;
-    public string title;
-    public string theDescription;
+    public event Action<int> OnDescriptionRequested, OnItemActionRequested, OnStartDragging;
+    public event Action<int,int> OnSwapItems;
     private int currentlyDraggedItem= -1;
 
     private void Awake(){
@@ -30,13 +28,16 @@ public class UI_InventoryMenu : MonoBehaviour
             //Clicking and Dragging Options
             uiItem.OnItemClicked += HandleItemSelection;
             uiItem.OnItemBeginDrag += HandleBeginDrag;
-            Debug.Log($"Subscribing {uiItem.name} to OnItemDroppedOn");
             uiItem.OnItemDroppedOn += HandleSwap;
             uiItem.OnItemEndDrag += HandleEndDrag;
             uiItem.OnRightMouseBtnClick += HandleShowItemActions;
         }
     }
-
+    public void Updatedata(int itemIndex, Sprite itemImage, int itemQuantity){
+        if(listofUIItems.Count > itemIndex){
+            listofUIItems[itemIndex].SetData(itemImage, itemQuantity);
+        }
+    }
     private void HandleShowItemActions(Ui_Item item)
     {
 
@@ -44,8 +45,7 @@ public class UI_InventoryMenu : MonoBehaviour
 
     private void HandleEndDrag(Ui_Item item)
     {
-        Debug.Log("END DRAG!");
-        mouseFollower.Toggle(false);
+            ResetDraggedItem();
     }
 
     private void HandleSwap(Ui_Item item)
@@ -53,19 +53,15 @@ public class UI_InventoryMenu : MonoBehaviour
         Debug.Log("SWAPING NOW!");
         int index = listofUIItems.IndexOf(item);
         if(index==-1){
-            mouseFollower.Toggle(false);
-            currentlyDraggedItem = -1;
             return;
         }
-        // Swap item data
-        Sprite tempSprite = listofUIItems[currentlyDraggedItem].ItemImage.sprite;
-        int tempQuantity = int.Parse(listofUIItems[currentlyDraggedItem].QuantityTxt.text);
+        OnSwapItems?.Invoke(currentlyDraggedItem, index);
+    }
 
-        listofUIItems[currentlyDraggedItem].SetData(item.ItemImage.sprite, int.Parse(item.QuantityTxt.text));
-        listofUIItems[index].SetData(tempSprite, tempQuantity);
-
-        mouseFollower.Toggle(false);
-        currentlyDraggedItem = -1;
+    private void ResetDraggedItem()
+    {
+       mouseFollower.Toggle(false);
+       currentlyDraggedItem = -1;
     }
 
     private void HandleBeginDrag(Ui_Item item)
@@ -76,30 +72,47 @@ public class UI_InventoryMenu : MonoBehaviour
             return;
         }
         currentlyDraggedItem = index;
+        HandleItemSelection(item);
+        OnStartDragging?.Invoke(index);
+    }
+    private void CreateDraggedItem(Sprite sprite, int quantity){
         mouseFollower.Toggle(true);
-        mouseFollower.SetData(index ==0 ? theSprite : theSprite2, quantity);
+        mouseFollower.SetData(sprite, quantity);
     }
 
     private void HandleItemSelection(Ui_Item item)
     {
-        Debug.Log("ITEM SELECTION!");
-        itemDescription.SetDescription(theSprite, title, theDescription); 
-        listofUIItems[0].Select();
+        int index = listofUIItems.IndexOf(item);
+        if(index==-1) return;
+        OnDescriptionRequested?.Invoke(index);
+    }
+    public void Show(){
+        ResetSelection();
+    }
+    public void Hide(){
+        itemDescription.ResetDescription();
+            ResetDraggedItem();
+        gameObject.SetActive(false);
     }
 
-    public void ShowHide(){
-        
-        
-        gameObject.SetActive(!gameObject.activeSelf);
-        if(gameObject.activeSelf){
-            listofUIItems[0].SetData(theSprite, quantity);
-            listofUIItems[1].SetData(theSprite2, quantity);
+    public void ResetSelection()
+    {
+        gameObject.SetActive(true);
+        itemDescription.ResetDescription();
+        DeselectAllItems();
+    }
 
-        }
-        else{
-            itemDescription.ResetDescription();
+    private void DeselectAllItems()
+    {
+        foreach(Ui_Item item in listofUIItems){
+            item.Deselect();
         }
     }
-    
 
+    internal void UpdateDescription(int itemIndex, Sprite image, string name, string description)
+    {
+        itemDescription.SetDescription(image, name, description);
+        DeselectAllItems(); 
+        listofUIItems[itemIndex].Select();
+    }
 }

@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Ui_Item : MonoBehaviour
+public class Ui_Item : MonoBehaviour, IPointerClickHandler, IBeginDragHandler,IEndDragHandler, IDropHandler, IDragHandler
 {
    [SerializeField] private Image itemImage;
    [SerializeField] private Image borderImage;
@@ -24,7 +24,7 @@ public class Ui_Item : MonoBehaviour
         Deselect();
     }
 
-    private void Deselect()
+    public void Deselect()
     {
         borderImage.enabled=false;
     }
@@ -42,35 +42,42 @@ public class Ui_Item : MonoBehaviour
     public void Select(){
         this.borderImage.enabled=true;
     }
-    public void OnBeginDrag(){
-        if(empty)
-            return;
-        OnItemBeginDrag?.Invoke(this);
-    }
-    public void OnDrop()
+    public void OnPointerClick(PointerEventData eventData)
     {
-    Debug.Log($"OnDrop executed on {gameObject.name}");
-    if (OnItemDroppedOn == null)
-    {
-        Debug.LogError($"OnItemDroppedOn is null for {gameObject.name}!");
-        return;
-    }
-
-    OnItemDroppedOn.Invoke(this);
-    }
-
-    public void OnendDrag(){
-        OnItemEndDrag?.Invoke(this);
-    }
-    public void OnPointerClick(BaseEventData data){
-        if(empty)
-            return;
-        PointerEventData pointerData = (PointerEventData)data;
-        if(pointerData.button == PointerEventData.InputButton.Right){
+        //PointerEventData pointerData = (PointerEventData)eventData;
+        if(eventData.button == PointerEventData.InputButton.Right){
             OnRightMouseBtnClick?.Invoke(this);
         }
         else{
             OnItemClicked?.Invoke(this);
         }
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if(empty)
+            return;
+        OnItemBeginDrag?.Invoke(this);
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        OnItemEndDrag?.Invoke(this);
+    }
+
+    public void OnDrop(PointerEventData eventData)
+    {
+        Debug.Log($"OnDrop executed on {gameObject.name}");
+        if (OnItemDroppedOn == null)
+        {
+        Debug.LogError($"OnItemDroppedOn is null for {gameObject.name}!");
+        return;
+        }
+
+    OnItemDroppedOn.Invoke(this);
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
     }
 }
