@@ -1,20 +1,50 @@
+using Inventory.UI;
+using Inventory.Model;
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryManager : MonoBehaviour
+namespace Inventory
+{
+    public class InventoryManager : MonoBehaviour
 {
     [SerializeField] private UI_InventoryMenu uiInventory;
-    [SerializeField] private Inventory_SO inventoryData;
+    [SerializeField] public Inventory_SO inventoryData;
 
-    void Awake(){
+    public List<InventoryItem> initialItems = new List<InventoryItem>();
+
+        public List<InventoryItem> InitialItems { get => initialItems; }
+
+        void Awake(){
         PrepareUI();
-        //inventoryData.Initialize();
         uiInventory.Hide();
+        PrepareInventoryData();
     }
 
-    private void PrepareUI()
+        private void PrepareInventoryData()
+        {
+            inventoryData.Initialize();
+            inventoryData.OnInventoryUpdated += UpdateInventoryUI;
+            foreach (InventoryItem item in initialItems)
+            {
+                if (item.isEmpty) continue;
+                inventoryData.AddItem(item);
+            }
+        }
+
+        private void UpdateInventoryUI(Dictionary<int, InventoryItem> inventoryState)
+        {
+            uiInventory.ResetAllItems();
+            foreach (var item in inventoryState)
+            {
+                uiInventory.Updatedata(item.Key, item.Value.item.ItemImage, item.Value.quantity);
+
+            }
+        }
+
+        private void PrepareUI()
     {
         uiInventory.InitializeInventory(inventoryData.Size);
         this.uiInventory.OnDescriptionRequested += HandleDescriptionRequest;
@@ -30,12 +60,15 @@ public class InventoryManager : MonoBehaviour
 
     private void HandleDragging(int itemIndex)
     {
-        
+        InventoryItem inventoryItem = inventoryData.GetItemAt(itemIndex);
+        if(inventoryItem.isEmpty)
+        return;
+        uiInventory.CreateDraggedItem(inventoryItem.item.ItemImage, inventoryItem.quantity);
     }
 
     private void HandleSwapItems(int itemIndex1, int itemIndex2)
     {
-        
+        inventoryData.SwapItems(itemIndex1, itemIndex2);
     }
 
     private void HandleDescriptionRequest(int itemIndex)
@@ -65,4 +98,5 @@ public class InventoryManager : MonoBehaviour
                 
         }    
     }
+}
 }

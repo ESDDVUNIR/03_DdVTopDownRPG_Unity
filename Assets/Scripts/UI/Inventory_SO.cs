@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
+namespace Inventory.Model{
+    [CreateAssetMenu]
 public class Inventory_SO : ScriptableObject
 {
     [SerializeField]
@@ -11,6 +12,7 @@ public class Inventory_SO : ScriptableObject
     [SerializeField]
     private int size=10;
     public int Size { get => size; set => size = value; }
+    public event Action<Dictionary<int, InventoryItem>> OnInventoryUpdated;
     public void Initialize(){
         inventoryItems = new List<InventoryItem>();
         for(int i=0; i< size; i++){
@@ -24,8 +26,12 @@ public class Inventory_SO : ScriptableObject
                     item = item,
                     quantity=quantity,
                 };
+                return;
             }
         }
+    }
+    public void AddItem(InventoryItem item){
+        AddItem(item.item, item.quantity);
     }
     public Dictionary<int, InventoryItem> GetCurrrentInventoryState(){
         Dictionary<int, InventoryItem> returnValue = new Dictionary<int, InventoryItem>();
@@ -42,7 +48,20 @@ public class Inventory_SO : ScriptableObject
     {
         return inventoryItems[itemIndex];
     }
-}
+
+    public void SwapItems(int itemIndex1, int itemIndex2)
+    {
+        InventoryItem item1= inventoryItems[itemIndex1];
+        inventoryItems[itemIndex1] = inventoryItems[itemIndex2];
+        inventoryItems[itemIndex2] = item1;
+        InformAboutChange();
+    }
+
+    private void InformAboutChange()
+    {
+        OnInventoryUpdated?.Invoke(GetCurrrentInventoryState());
+    }
+    }
 [Serializable]
 public struct InventoryItem{
         public int quantity;
@@ -61,4 +80,6 @@ public struct InventoryItem{
                 item=null,
                 quantity=0
             };
+}
+
 }

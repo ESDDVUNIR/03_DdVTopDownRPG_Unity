@@ -13,12 +13,22 @@ MonoBehaviour:
   m_Name: PLayerInventory
   m_EditorClassIdentifier: 
   inventoryItems:
+  - quantity: 2
+    item: {fileID: 11400000, guid: 0b159947720903143abf47042a8e590a, type: 2}
+  - quantity: 0
+    item: {fileID: 0}
   - quantity: 1
     item: {fileID: 11400000, guid: d918ab6880c6f0d449f9e19830003c96, type: 2}
   - quantity: 0
     item: {fileID: 0}
-  - quantity: 5
-    item: {fileID: 11400000, guid: 0b159947720903143abf47042a8e590a, type: 2}
+  - quantity: 0
+    item: {fileID: 0}
+  - quantity: 0
+    item: {fileID: 0}
+  - quantity: 0
+    item: {fileID: 0}
+  - quantity: 0
+    item: {fileID: 0}
   - quantity: 0
     item: {fileID: 0}
   - quantity: 0

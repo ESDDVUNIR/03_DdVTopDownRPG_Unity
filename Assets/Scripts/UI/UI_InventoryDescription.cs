@@ -5,7 +5,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_InventoryDescription : MonoBehaviour
+namespace Inventory.UI{
+    public class UI_InventoryDescription : MonoBehaviour
 {
     [SerializeField] private Image itemImage;
    [SerializeField] private TMP_Text title;
@@ -27,3 +28,5 @@ public class UI_InventoryDescription : MonoBehaviour
         this.description.text= itemDescription;
     }
 }
+}
+
