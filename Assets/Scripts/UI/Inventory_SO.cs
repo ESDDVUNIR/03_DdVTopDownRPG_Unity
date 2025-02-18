@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.TestTools.Constraints;
 
 namespace Inventory.Model{
     [CreateAssetMenu]
@@ -19,18 +22,85 @@ public class Inventory_SO : ScriptableObject
             inventoryItems.Add(InventoryItem.GetEmptyItem());
         }
     }
-    public void AddItem(ItemSO item, int quantity){
-        for(int i=0; i< inventoryItems.Count;i++){
-            if(inventoryItems[i].isEmpty){
-                inventoryItems[i] = new InventoryItem{
-                    item = item,
-                    quantity=quantity,
-                };
-                return;
-            }
+    public int AddItem(ItemSO item, int quantity){
+        if(item.IsStackable ==false){
+            for(int i=0; i< inventoryItems.Count;i++){
+                while(quantity>0 && IsInventoryFull()==false){
+                   quantity-= AddNonStackableItem(item, 1);
+                    quantity--;
+                }
+                InformAboutChange();
+                return quantity;
         }
+        }
+        quantity = AddStackablItem(item, quantity);
+        InformAboutChange();
+        return quantity;        
     }
-    public void AddItem(InventoryItem item){
+
+        private int AddNonStackableItem(ItemSO item, int quantity)
+        {
+            InventoryItem newItem = new InventoryItem{
+                item=item,
+                quantity=quantity
+            };
+            
+            for(int i=0; i < inventoryItems.Count; i++){
+                if(inventoryItems[i].isEmpty){
+                    inventoryItems[i]=newItem;
+                    return quantity;
+                }
+            }
+            return 0;
+        }
+
+        private bool IsInventoryFull()
+        => inventoryItems.Where(item=> item.isEmpty).Any()==false;
+
+        private int AddStackablItem(ItemSO item, int quantity)
+        {
+         for (int i = 0; i < inventoryItems.Count; i++)
+         {
+            if(inventoryItems[i].isEmpty)
+            continue;
+            if(inventoryItems[i].item.ID == item.ID){
+                int amountPossibleToTake =
+                    inventoryItems[i].item.MazStackSize - inventoryItems[i].quantity;
+                if(quantity > amountPossibleToTake){
+                    inventoryItems[i] = inventoryItems[i].ChangeQuantity(inventoryItems[i].item.MazStackSize);
+                    quantity-=amountPossibleToTake;
+                }
+                else{
+                    inventoryItems[i] = inventoryItems[i].ChangeQuantity(inventoryItems[i].quantity+quantity);
+                    InformAboutChange();
+                    return 0;
+                }
+            }
+         }
+         while(quantity > 0 && IsInventoryFull()==false){
+            int newQuantity = Math.Clamp(quantity,0, item.MazStackSize);
+            quantity-= newQuantity;
+            AddItemToFirstFreeSlot(item, newQuantity);
+         }
+         return quantity;
+        }
+
+    private int AddItemToFirstFreeSlot(ItemSO item, int quantity)
+    {
+        InventoryItem newItem = new InventoryItem{
+            item = item,
+            quantity= quantity
+        };
+        for(int i=0; i < inventoryItems.Count; i++){
+                if(inventoryItems[i].isEmpty){
+                    inventoryItems[i]=newItem;
+                    return quantity;
+                }
+            }
+            return 0;
+    }
+
+        public void AddItem(InventoryItem item){
         AddItem(item.item, item.quantity);
     }
     public Dictionary<int, InventoryItem> GetCurrrentInventoryState(){

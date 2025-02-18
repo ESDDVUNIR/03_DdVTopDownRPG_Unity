@@ -7,7 +7,7 @@ namespace Inventory.Model{
         private int myPro;
        [field: SerializeField]
        private bool isStackable;
-       private int ID => GetInstanceID();
+       public int ID => GetInstanceID();
 
        [field: SerializeField]
        private int maxStackSize=1;
