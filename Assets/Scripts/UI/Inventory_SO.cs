@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.TestTools.Constraints;
+//using UnityEngine.TestTools.Constraints;
 
 namespace Inventory.Model{
     [CreateAssetMenu]
