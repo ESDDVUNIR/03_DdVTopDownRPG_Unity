@@ -15,6 +15,8 @@ namespace Inventory.UI{
         public event Action<int> OnDescriptionRequested, OnItemActionRequested, OnStartDragging;
         public event Action<int,int> OnSwapItems;
         private int currentlyDraggedItem= -1;
+        [SerializeField] 
+        private ItemActionPanel actionPanel;
 
         private void Awake(){
             itemDescription.ResetDescription();
@@ -41,7 +43,11 @@ namespace Inventory.UI{
         }
         private void HandleShowItemActions(Ui_Item item)
         {
-
+            int index = listofUIItems.IndexOf(item);
+            if(index==-1){
+                return;
+            }
+            OnItemActionRequested?.Invoke(index);
         }
 
         private void HandleEndDrag(Ui_Item item)
@@ -93,7 +99,8 @@ namespace Inventory.UI{
         }
         public void Hide(){
             itemDescription.ResetDescription();
-                ResetDraggedItem();
+            actionPanel.Toggle(false);
+            ResetDraggedItem();
             gameObject.SetActive(false);
         }
 
@@ -103,12 +110,19 @@ namespace Inventory.UI{
             itemDescription.ResetDescription();
             DeselectAllItems();
         }
-
+        public void ShowItemAction(int itemIndex){
+            actionPanel.Toggle(true);
+            actionPanel.transform.position = listofUIItems[itemIndex].transform.position;
+        }
+        public void AddAction(string actionName, Action performAction){
+            actionPanel.AddButon(actionName, performAction);
+        }
         private void DeselectAllItems()
         {
             foreach(Ui_Item item in listofUIItems){
                 item.Deselect();
             }
+            actionPanel.Toggle(false);
         }
 
         internal void UpdateDescription(int itemIndex, Sprite image, string name, string description)

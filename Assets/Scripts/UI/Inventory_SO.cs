@@ -22,17 +22,19 @@ public class Inventory_SO : ScriptableObject
             inventoryItems.Add(InventoryItem.GetEmptyItem());
         }
     }
-    public int AddItem(ItemSO item, int quantity){
-        if(item.IsStackable ==false){
-            for(int i=0; i< inventoryItems.Count;i++){
-                while(quantity>0 && IsInventoryFull()==false){
-                   quantity-= AddNonStackableItem(item, 1);
-                    quantity--;
+    public int AddItem(ItemSO item, int quantity, List<ItemParameter> itemState=null){
+        if(item.IsStackable == false)
+            {
+                 for (int i = 0; i < inventoryItems.Count; i++)
+                {
+                    while(quantity > 0 && IsInventoryFull() == false)
+                    {
+                        quantity -= AddItemToFirstFreeSlot(item, 1, itemState);
+                    }
+                    InformAboutChange();
+                    return quantity;
                 }
-                InformAboutChange();
-                return quantity;
-        }
-        }
+            }
         quantity = AddStackablItem(item, quantity);
         InformAboutChange();
         return quantity;        
@@ -85,11 +87,12 @@ public class Inventory_SO : ScriptableObject
          return quantity;
         }
 
-    private int AddItemToFirstFreeSlot(ItemSO item, int quantity)
+    private int AddItemToFirstFreeSlot(ItemSO item, int quantity, List<ItemParameter> itemState=null)
     {
         InventoryItem newItem = new InventoryItem{
             item = item,
-            quantity= quantity
+            quantity= quantity,
+            itemState = new List<ItemParameter>(itemState==null ? item.DefaultParameterList1 : itemState)
         };
         for(int i=0; i < inventoryItems.Count; i++){
                 if(inventoryItems[i].isEmpty){
@@ -131,24 +134,43 @@ public class Inventory_SO : ScriptableObject
     {
         OnInventoryUpdated?.Invoke(GetCurrrentInventoryState());
     }
+
+    public void RemoveItem(int itemIndex, int amount)
+    {
+        if(inventoryItems.Count > itemIndex){
+            if(inventoryItems[itemIndex].isEmpty)
+            return;
+            int reminder = inventoryItems[itemIndex].quantity - amount;
+            if(reminder <= 0){
+                inventoryItems[itemIndex] = InventoryItem.GetEmptyItem();
+            }
+            else{
+                inventoryItems[itemIndex]= inventoryItems[itemIndex].ChangeQuantity(reminder);
+            }
+            InformAboutChange();
+        }
+    }
     }
 [Serializable]
 public struct InventoryItem{
         public int quantity;
         public ItemSO item;
         public bool isEmpty => item == null;
+        public List<ItemParameter> itemState;
 
         public InventoryItem ChangeQuantity(int newQuantity){
             return new InventoryItem{
                 item = this.item,
                 quantity= newQuantity,
+                itemState = new List<ItemParameter>(this.itemState)
             };
         }
         public static InventoryItem GetEmptyItem()=>
             new InventoryItem
             {
                 item=null,
-                quantity=0
+                quantity=0,
+                itemState = new List<ItemParameter>()
             };
 }
 
