@@ -88,18 +88,18 @@ public class Player : MonoBehaviour
         colliderDelante = LanzarCheck();
         if (colliderDelante)
         //Guillermo - Convierte el Collider en Trigger
-        colliderDelante.isTrigger = true;
+        //colliderDelante.isTrigger = true;
         {
             if (colliderDelante.gameObject.CompareTag("NPC"))
             {
                 NPC npcScript = colliderDelante.gameObject.GetComponent<NPC>();
                 npcScript.Interactuar();
             }
-        }
-        // Guillermo - Item
-            Item item = colliderDelante.GetComponent<Item>();
-            if (item != null)
+            // Guillermo - Item
+            
+            if (colliderDelante.GetComponent<Item>() != null)
             {
+                Item item = colliderDelante.GetComponent<Item>();
                 Debug.Log("COLLIDE WITH ITEM");
                 
                 int remainder = inventoryData.AddItem(item.InventoryItem, item.Quantity);
@@ -114,7 +114,9 @@ public class Player : MonoBehaviour
                     item.Quantity = remainder;
                     Debug.Log("Some items remain");
                 }
-    }
+            }
+        }
+            
     }
 
     IEnumerator Mover()

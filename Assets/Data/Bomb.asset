@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8c703d1854ef3b439d119bdb23bb2e8, type: 3}
   m_Name: Bomb
   m_EditorClassIdentifier: 
-  isStackable: 0
-  maxStackSize: 1
+  isStackable: 1
+  maxStackSize: 99
   name: Bomb
   description: Expllodes
   itemImage: {fileID: 21300000, guid: 90a177c6fcc6045b3817e7b3d2b189f0, type: 3}

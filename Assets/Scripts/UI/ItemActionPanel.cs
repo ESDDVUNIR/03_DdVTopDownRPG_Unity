@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System;
-
+ 
 namespace Inventory.UI{
     public class ItemActionPanel : MonoBehaviour
     {

@@ -7,7 +7,7 @@ namespace Inventory.Model{
     public class EquipableItemSO : ItemSO, IDestroyableItem, IItemAction
     {
         public string ActionName => "Equip";
-        [field: SerializeField]
+        [field: SerializeField] 
         public AudioClip actionSFX {get; private set;}
 
         public bool PerformAction(GameObject character,List<ItemParameter> itemState=null)
