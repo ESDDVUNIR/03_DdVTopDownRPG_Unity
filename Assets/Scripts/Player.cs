@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Inventory.Model;
+using Unity.VisualScripting;
 public class Player : MonoBehaviour
 {
     private float inputH;
@@ -13,8 +14,11 @@ public class Player : MonoBehaviour
     private Collider2D colliderDelante; //Indica el collider que tenemos delante.
     private Animator anim;
 
+    [SerializeField] private GameManagerSO gm;
     [SerializeField] private float velocidadMovimiento;
     [SerializeField] private float radioInteraccion;
+    [SerializeField]
+    private Inventory_SO inventoryData;
 
     private bool interactuando;
 
@@ -23,7 +27,15 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Guillermo - Convierte el Collider en Trigger y reposiciona a player
+        transform.position = gm.NewPosition;
         anim = GetComponent<Animator>();
+        anim.SetFloat("InputH",gm.NewOrientation.x);
+        anim.SetFloat("InputV",gm.NewOrientation.y);
+        
+        if (colliderDelante)
+        colliderDelante.isTrigger = true;
+        //-------------------------------------------------
     }
 
     // Update is called once per frame
@@ -48,6 +60,7 @@ public class Player : MonoBehaviour
             puntoInteraccion = puntoDestino;
 
             colliderDelante = LanzarCheck();
+            
 
             if (!colliderDelante)
             {
@@ -80,13 +93,36 @@ public class Player : MonoBehaviour
     {
         colliderDelante = LanzarCheck();
         if (colliderDelante)
+        //Guillermo - Convierte el Collider en Trigger
+        //colliderDelante.isTrigger = true;
         {
             if (colliderDelante.gameObject.CompareTag("NPC"))
             {
                 NPC npcScript = colliderDelante.gameObject.GetComponent<NPC>();
                 npcScript.Interactuar();
             }
+            // Guillermo - Item
+            
+            if (colliderDelante.GetComponent<Item>() != null)
+            {
+                Item item = colliderDelante.GetComponent<Item>();
+                Debug.Log("COLLIDE WITH ITEM");
+                
+                int remainder = inventoryData.AddItem(item.InventoryItem, item.Quantity);
+                
+                if (remainder == 0)
+                {
+                    item.DestroyItem();
+                    Debug.Log("Item picked up completely");
+                }
+                else
+                {
+                    item.Quantity = remainder;
+                    Debug.Log("Some items remain");
+                }
+            }
         }
+            
     }
 
     IEnumerator Mover()
@@ -103,10 +139,29 @@ public class Player : MonoBehaviour
     }
     private Collider2D LanzarCheck()
     {
-        return Physics2D.OverlapCircle(puntoInteraccion, radioInteraccion);
+       //return Physics2D.OverlapCircle(puntoInteraccion, radioInteraccion);
+       Collider2D hitCollider = Physics2D.OverlapCircle(puntoInteraccion, radioInteraccion);
+    
+    if (hitCollider != null)
+    {
+        Debug.Log("Detected: " + hitCollider.gameObject.name); // Debug to check detection
+
+        if (!hitCollider.CompareTag("NPC")) 
+        {
+            Debug.Log("Setting isTrigger to TRUE for " + hitCollider.gameObject.name);
+            hitCollider.isTrigger = true; // Set trigger before collision happens
+            return null;
+        }
+        else{
+            return hitCollider;
+        }
+        
+    }
+        return hitCollider;
     }
     private void OnDrawGizmos()
     {
+        Gizmos.color = Color.red;
         Gizmos.DrawSphere(puntoInteraccion, radioInteraccion);
     }
 }

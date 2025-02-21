@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 6737300716572686741}
   - component: {fileID: 3908081495468115724}
   - component: {fileID: 3090209133623976973}
+  - component: {fileID: 5883588317706791579}
+  - component: {fileID: 7165419989461414925}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -48,8 +50,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6cede58171c3c040a3d20989a34fda9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gm: {fileID: 11400000, guid: 120eae74bf8fc914dafc7eb881fc148b, type: 2}
   velocidadMovimiento: 5
   radioInteraccion: 0.3
+  inventoryData: {fileID: 11400000, guid: 3422cd241fcb97441bb059f48a4792c0, type: 2}
 --- !u!212 &8557554098391293276
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -172,7 +176,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.16, y: 0.16}
+  m_Size: {x: 0.61, y: 0.87}
   m_EdgeRadius: 0
 --- !u!95 &3090209133623976973
 Animator:
@@ -195,3 +199,34 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5883588317706791579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2240945717552745153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a10f73868c35f664aac15649ee15babe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryData: {fileID: 11400000, guid: 3422cd241fcb97441bb059f48a4792c0, type: 2}
+--- !u!114 &7165419989461414925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2240945717552745153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94234d79baffa4944825d55d22aa7fff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weapon: {fileID: 11400000, guid: ec918ff9476b70d45990b3c60bfb4bbb, type: 2}
+  inventoryData: {fileID: 11400000, guid: 3422cd241fcb97441bb059f48a4792c0, type: 2}
+  parametersToModify:
+  - itemParameter: {fileID: 11400000, guid: 47e372e3ab410ff4c9e850953552833b, type: 2}
+    value: -10
+  itemCurrentState: []

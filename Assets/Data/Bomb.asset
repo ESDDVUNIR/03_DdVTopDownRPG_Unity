@@ -9,11 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0de7fb5692aa414686e9f216005e6a7, type: 3}
+  m_Script: {fileID: 11500000, guid: c8c703d1854ef3b439d119bdb23bb2e8, type: 3}
   m_Name: Bomb
   m_EditorClassIdentifier: 
   isStackable: 1
   maxStackSize: 99
   name: Bomb
-  description: You can break some wall with these.
+  description: Expllodes
   itemImage: {fileID: 21300000, guid: 90a177c6fcc6045b3817e7b3d2b189f0, type: 3}
+  DefaultParameterList: []
+  modifiersData: []
+  <actionSFX>k__BackingField: {fileID: 8300000, guid: df2d63124c2ac418eb83dd32903cd4b6, type: 3}

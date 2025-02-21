@@ -9,11 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0de7fb5692aa414686e9f216005e6a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 56d7322418e6304478944881538aab48, type: 3}
   m_Name: Sword
   m_EditorClassIdentifier: 
   isStackable: 0
   maxStackSize: 1
   name: Sword
-  description: The weapong of a hero.
+  description: Your best weapon against evil
   itemImage: {fileID: 21300000, guid: ad4bde4ff881b433c9782cb194049b0f, type: 3}
+  DefaultParameterList:
+  - itemParameter: {fileID: 11400000, guid: 47e372e3ab410ff4c9e850953552833b, type: 2}
+    value: 100
+  <actionSFX>k__BackingField: {fileID: 8300000, guid: 5ac3bd930ca144afdb001d5452420c9f, type: 3}

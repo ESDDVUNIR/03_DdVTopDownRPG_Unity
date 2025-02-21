@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO.Enumeration;
@@ -8,6 +9,16 @@ using UnityEngine.SceneManagement;
 public class GameManagerSO : ScriptableObject
 {
     private Player player;
+    [NonSerialized]
+    private Vector3 newPosition = new Vector3(-1.921f, 0.897f,0f);
+    [NonSerialized]
+    private Vector2 newOrientation = new Vector2(0,-1);
+
+    public Vector3 NewPosition { get => newPosition; }
+    public Vector2 NewOrientation { get => newOrientation;}
+    [NonSerialized]
+    private int collectedCoins;
+
     private void OnEnable() //Llamadas por EVENTO.
     {
         SceneManager.sceneLoaded += NuevaEscenaCargada;
@@ -17,6 +28,14 @@ public class GameManagerSO : ScriptableObject
     {
         player = FindObjectOfType<Player>(); //Buscar instancia directamente;
     }
+    //----------------------------GUILLERMO--------------------------------
+    public void LoadNewScene(Vector3 newPosition, Vector2 newOrientation, int newSceneIndex){
+        this.newPosition = newPosition;
+        this.newOrientation = newOrientation;
+        SceneManager.LoadScene(newSceneIndex);
+
+    }
+    //---------------------------------------------------------------------
 
     public void CambiarEstadoPlayer(bool estado)
     {
