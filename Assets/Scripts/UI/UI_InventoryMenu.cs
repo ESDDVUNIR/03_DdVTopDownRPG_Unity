@@ -19,6 +19,8 @@ namespace Inventory.UI{
         private ItemActionPanel actionPanel;
 
         private void Awake(){
+            //ResetAllItems();  // Ensure UI is cleared to prevent old references
+
             itemDescription.ResetDescription();
             mouseFollower.Toggle(false);
         }
@@ -136,8 +138,10 @@ namespace Inventory.UI{
         {
             foreach (var item in listofUIItems)
             {
+                if(item!=null){
                 item.ResetData();
                 item.Deselect();
+                }
             }
         }
     }

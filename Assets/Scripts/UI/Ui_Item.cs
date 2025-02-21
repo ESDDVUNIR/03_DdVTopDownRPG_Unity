@@ -28,18 +28,22 @@ namespace Inventory.UI{
 
         public void Deselect()
         {
-            borderImage.enabled=false;
+            if (borderImage == null) return;  // Prevents error if the object is destroyed
+            borderImage.enabled = false;
         }
 
         public void ResetData()
         {
+           if (itemImage == null) return;  // Prevents error
             this.itemImage.gameObject.SetActive(false);
         }
         public void SetData(Sprite sprite, int quantity){
+            if(itemImage!=null){
             this.itemImage.gameObject.SetActive(true);
             this.itemImage.sprite = sprite;
             this.quantityTxt.text = quantity+"";
             empty=false;
+            }
         }
         public void Select(){
             this.borderImage.enabled=true;
