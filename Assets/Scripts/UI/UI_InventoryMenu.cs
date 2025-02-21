@@ -20,7 +20,6 @@ namespace Inventory.UI{
 
         private void Awake(){
             //ResetAllItems();  // Ensure UI is cleared to prevent old references
-
             itemDescription.ResetDescription();
             mouseFollower.Toggle(false);
         }

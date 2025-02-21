@@ -9,13 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56d7322418e6304478944881538aab48, type: 3}
-  m_Name: Boots
+  m_Script: {fileID: 11500000, guid: c8c703d1854ef3b439d119bdb23bb2e8, type: 3}
+  m_Name: Rocks
   m_EditorClassIdentifier: 
-  isStackable: 0
-  maxStackSize: 1
-  name: Botas
-  description: Perefectas para correr
-  itemImage: {fileID: 21300000, guid: 5956785b2be4a41f58f2f834de40867c, type: 3}
+  isStackable: 1
+  maxStackSize: 99
+  name: Roca
+  description: Desde que ya no hay papas por la hambruna, usa a estas para aliviar
+    el hambre. Entran de froma sencilla a diferencia de como salen.
+  itemImage: {fileID: 21300000, guid: 1095a2991ccab42b4ad00a8db151f3fd, type: 3}
   DefaultParameterList: []
+  modifiersData: []
   <actionSFX>k__BackingField: {fileID: 8300000, guid: edb8af3552106324e878e1d37344e478, type: 3}
