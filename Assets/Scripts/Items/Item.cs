@@ -7,6 +7,8 @@ public class Item : MonoBehaviour
 {
      [field: SerializeField]
     public ItemSO InventoryItem { get; private set; }
+     [field: SerializeField]
+    private GameManagerSO gm;
 
     [field: SerializeField]
     public int Quantity { get; set; } = 1;

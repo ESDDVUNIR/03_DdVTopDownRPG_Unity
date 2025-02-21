@@ -1,3 +1,7 @@
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,11 +21,32 @@ public class Inventory_SO : ScriptableObject
     public int Size { get => size; set => size = value; }
     public event Action<Dictionary<int, InventoryItem>> OnInventoryUpdated;
     public void Initialize(){
-        inventoryItems = new List<InventoryItem>();
+        /*inventoryItems = new List<InventoryItem>();
         for(int i=0; i< size; i++){
+            inventoryItems.Add(InventoryItem.GetEmptyItem());
+        }*/
+    }
+    void OnApplicationQuit()
+    {
+    ResetInventory();
+        }
+    public void ResetInventory()
+    {
+        inventoryItems = new List<InventoryItem>();
+        for (int i = 0; i < size; i++)
+        {
             inventoryItems.Add(InventoryItem.GetEmptyItem());
         }
     }
+     #if UNITY_EDITOR
+    void OnDisable()
+    {
+        /*if (!EditorApplication.isPlayingOrWillChangePlaymode)
+        {*/
+            ResetInventory(); // Reset inventory when stopping Play Mode in the Editor
+        //}
+    }
+    #endif
     public int AddItem(ItemSO item, int quantity, List<ItemParameter> itemState=null){
         if(item.IsStackable == false)
             {

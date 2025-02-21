@@ -30,6 +30,8 @@ public class Player : MonoBehaviour
         //Guillermo - Convierte el Collider en Trigger y reposiciona a player
         transform.position = gm.NewPosition;
         anim = GetComponent<Animator>();
+        anim.SetFloat("InputH",gm.NewOrientation.x);
+        anim.SetFloat("InputV",gm.NewOrientation.y);
         
         if (colliderDelante)
         colliderDelante.isTrigger = true;

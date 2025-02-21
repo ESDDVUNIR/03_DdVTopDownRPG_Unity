@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO.Enumeration;
@@ -8,11 +9,15 @@ using UnityEngine.SceneManagement;
 public class GameManagerSO : ScriptableObject
 {
     private Player player;
+    [NonSerialized]
     private Vector3 newPosition = new Vector3(-1.921f, 0.897f,0f);
+    [NonSerialized]
     private Vector2 newOrientation = new Vector2(0,-1);
 
     public Vector3 NewPosition { get => newPosition; }
     public Vector2 NewOrientation { get => newOrientation;}
+    [NonSerialized]
+    private int collectedCoins;
 
     private void OnEnable() //Llamadas por EVENTO.
     {
