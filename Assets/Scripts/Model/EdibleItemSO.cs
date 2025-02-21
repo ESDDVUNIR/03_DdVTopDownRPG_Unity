@@ -38,6 +38,13 @@ namespace Inventory.Model
         public AudioClip actionSFX { get; }
         bool PerformAction(GameObject character,List<ItemParameter> itemState=null);
     }
+    public interface IInterchangeItem
+    {
+        public string ActionName { get; }
+        public AudioClip actionSFX { get; }
+        bool PerformExchange(GameObject character,List<ItemParameter> itemState=null);
+
+    }
 
     [Serializable]
     public class ModifierData

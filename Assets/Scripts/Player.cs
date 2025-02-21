@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     private Collider2D colliderDelante; //Indica el collider que tenemos delante.
     private Animator anim;
 
+    [SerializeField] private GameManagerSO gm;
     [SerializeField] private float velocidadMovimiento;
     [SerializeField] private float radioInteraccion;
     [SerializeField]
@@ -26,10 +27,13 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Guillermo - Convierte el Collider en Trigger y reposiciona a player
+        transform.position = gm.NewPosition;
         anim = GetComponent<Animator>();
-        //Guillermo - Convierte el Collider en Trigger
+        
         if (colliderDelante)
         colliderDelante.isTrigger = true;
+        //-------------------------------------------------
     }
 
     // Update is called once per frame
@@ -140,7 +144,7 @@ public class Player : MonoBehaviour
     {
         Debug.Log("Detected: " + hitCollider.gameObject.name); // Debug to check detection
 
-        if (hitCollider.CompareTag("Item")) 
+        if (!hitCollider.CompareTag("NPC")) 
         {
             Debug.Log("Setting isTrigger to TRUE for " + hitCollider.gameObject.name);
             hitCollider.isTrigger = true; // Set trigger before collision happens
